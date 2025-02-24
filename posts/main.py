@@ -13,6 +13,8 @@ models.Base.metadata.create_all(bind=engine)
 class PostInput(BaseModel):
     titulo: str
 
+
+
 def get_db():
     db= SessionLocal()
     try:
@@ -40,8 +42,6 @@ async def create_posts(post: PostInput, db: db_dependency, request: Request):
     db.add(db_post)
     db.commit()
     db.refresh(db_post)
-    print("La respuesta es")
-    print(response.json())
     return db_post
 
 
@@ -137,6 +137,32 @@ async def get_posts(db:db_dependency, request: Request):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post no encontrado")
     return db_post
 
+
+@app.post("/posts/{post_id}/tags/{tag_id}", status_code=status.HTTP_201_CREATED)
+async def create_post_tag(post_id:int, tag_id:int, db: db_dependency, request: Request):
+    headers=dict(request.headers)
+    authHeader= request.headers.get("Authorization")
+    if not authHeader:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No hay token")
+    url = f"http://{conf.USERS_PATH}/"
+    headers = {"Authorization": f"{authHeader}"}
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url, headers=headers)
+    if response.status_code!=200:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalido")
+    urlTags=f"http://{conf.TAGS_PATH}/tags/{tag_id}"
+    async with httpx.AsyncClient() as client:
+        responseTags = await client.get(urlTags, headers=headers)
+    if responseTags.status_code!=200:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tag no encontrado")
+    db_post=db.query(models.Post).filter(models.Post.id== post_id).first()
+    if not db_post:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post no encontrado")
+    db_post=models.PostTags(idPost=post_id, idTag=tag_id)
+    db.add(db_post)
+    db.commit()
+    db.refresh(db_post)
+    return db_post
 
     
 

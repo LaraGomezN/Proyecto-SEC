@@ -1,14 +1,17 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException,  APIRouter
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from database import engine, SessionLocal
 from models import Tags
+import models
 from starlette import status
 
-router = FastAPI(
+app = FastAPI()
+router = APIRouter(
     prefix="/tags",
     tags=["tags"]
 )
+models.Base.metadata.create_all(bind=engine)
 
 # Dependencia para obtener la sesión de la base de datos
 def get_db():
@@ -68,3 +71,6 @@ async def delete_tag(tag_id: int, db: Session = db_dependency):
     db.delete(db_tag)
     db.commit()
     return {"message": "Etiqueta eliminada"}
+
+
+app.include_router(router)
