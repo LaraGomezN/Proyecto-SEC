@@ -85,7 +85,7 @@ async def get_review(review_id: int, db: Session = db_dependency, request: Reque
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Review not found")
     return review
 
-
+# Actualizar
 @router.put("/{review_id}", status_code=status.HTTP_200_OK)
 async def update_review(review_id: int, review: ReviewBase, db: Session = db_dependency, request: Request=None):
     headers=dict(request.headers)
