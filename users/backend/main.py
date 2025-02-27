@@ -1,12 +1,13 @@
 from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Annotated
-import models
+import models as models
 from starlette import status
 from database import engine, SessionLocal
 from sqlalchemy.orm import Session
-import auth
+import auth as auth
 from auth import get_current_user
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 app.include_router(auth.router)
@@ -53,3 +54,16 @@ async def user(user: user_dependency, db: db_dependency):
     return {"User": user}
 
 
+#FRONT
+origins = [
+    "http://localhost:3000", #Revisar el puerto
+    "https://dominio.com"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
