@@ -6,9 +6,17 @@ from database import engine, SessionLocal
 from sqlalchemy.orm import Session
 import conf
 import httpx
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Puedes restringirlo a dominios específicos
+    allow_credentials=True,
+    allow_methods=["*"],  # Permitir todos los métodos (GET, POST, OPTIONS, etc.)
+    allow_headers=["*"],  # Permitir todos los headers
+)
 
 class PostInput(BaseModel):
     titulo: str
