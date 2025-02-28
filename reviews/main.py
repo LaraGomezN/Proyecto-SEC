@@ -154,4 +154,6 @@ async def get_reviews(post_id:int,db: Session = db_dependency, request: Request=
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post no encontrado")
     return db.query(Reviews).filter(Reviews.post_id==post_id).all()
 
+
+
 app.include_router(router)

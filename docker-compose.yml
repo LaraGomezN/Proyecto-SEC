@@ -1,0 +1,138 @@
+version: "3.8"
+
+services:
+  user-db:
+    image: postgres:15
+    container_name: user-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: user_db
+    ports:
+      - "5432:5432"
+    networks:
+      - user_net
+
+  user-management:
+    build: ./users/backend
+    container_name: user-management
+    ports:
+      - "8000:8000"
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: root
+      DB_HOST: user-db
+      DB_PORT: 5432
+      DB_NAME: user_db
+    depends_on:
+      - user-db
+    networks:
+      - user_net
+      - app_net
+
+  
+  post-db:
+    image: postgres:15
+    container_name: post-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: posts
+    ports:
+      - "5433:5432"
+    networks:
+      - post_net
+
+  post-management:
+    build: ./posts
+    container_name: post-management
+    ports:
+      - "8080:8080"
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: root
+      DB_HOST: post-db
+      DB_PORT: 5432
+      DB_NAME: posts
+      USERS_PATH: user-management:8000
+      TAGS_PATH: tag-management:8081
+    depends_on:
+      - post-db
+    networks:
+      - post_net
+      - app_net
+
+
+  review-db:
+    image: postgres:15
+    container_name: review-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: review_db
+    ports:
+      - "5434:5432"
+    networks:
+      - review_net
+
+  review-management:
+    build: ./reviews
+    container_name: review-management
+    ports:
+      - "8082:8082"
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: root
+      DB_HOST: review-db
+      DB_PORT: 5432
+      DB_NAME: review_db
+      USERS_PATH: user-management:8000
+      POSTS_PATH: post-management:8080
+    depends_on:
+      - review-db
+    networks:
+      - review_net
+      - app_net
+
+
+  tag-db:
+    image: postgres:15
+    container_name: tag-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: tag_db
+    ports:
+      - "5435:5432"
+    networks:
+      - tag_net
+
+  tag-management:
+    build: ./tags
+    container_name: tag-management
+    ports:
+      - "8081:8081"
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: root
+      DB_HOST: tag-db
+      DB_PORT: 5432
+      DB_NAME: tag_db
+      USERS_PATH: user-management:8000
+      POSTS_PATH: post-management:8080
+    depends_on:
+      - tag-db
+    networks:
+      - tag_net
+      - app_net
+networks:
+  tag_net:
+    driver: bridge
+  review_net:
+    driver: bridge
+  post_net:
+    driver: bridge
+  user_net:
+    driver: bridge
+  app_net:
+    driver: bridge

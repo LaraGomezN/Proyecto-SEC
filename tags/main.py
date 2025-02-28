@@ -112,25 +112,25 @@ async def delete_tag(tag_id: int, db: Session = db_dependency, request: Request=
     db.delete(db_tag)
     db.commit()
     return {"message": "Etiqueta eliminada"}
-"""
+
 # Obtener etiquetas de un post
-@app.get("/posts/{post_id}/tags", status_code=status.HTTP_200_OK)
-async def get_tags(post_id:int,db: Session = db_dependency, request: Request=None):
-    headers=dict(request.headers)
-    authHeader= request.headers.get("Authorization")
-    if not authHeader:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No hay token")
-    url = f"http://{conf.USERS_PATH}/"
-    headers = {"Authorization": f"{authHeader}"}
-    async with httpx.AsyncClient() as client:
-        response = await client.get(url, headers=headers)
-    if response.status_code!=200:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalido")
-    urlPosts = f"http://{conf.POSTS_PATH}/posts/{post_id}"
-    async with httpx.AsyncClient() as client:
-        responsePosts = await client.get(urlPosts, headers=headers)
-    if responsePosts.status_code!=200:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post no encontrado")
-    return db.query(Tags).filter(Tags.post_id==post_id).all()
-"""
+# @app.get("/posts/{post_id}/tags", status_code=status.HTTP_200_OK)
+# async def get_tags(post_id:int,db: Session = db_dependency, request: Request=None):
+#     headers=dict(request.headers)
+#     authHeader= request.headers.get("Authorization")
+#     if not authHeader:
+#         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No hay token")
+#     url = f"http://{conf.USERS_PATH}/"
+#     headers = {"Authorization": f"{authHeader}"}
+#     async with httpx.AsyncClient() as client:
+#         response = await client.get(url, headers=headers)
+#     if response.status_code!=200:
+#         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalido")
+#     urlPosts = f"http://{conf.POSTS_PATH}/posts/{post_id}"
+#     async with httpx.AsyncClient() as client:
+#         responsePosts = await client.get(urlPosts, headers=headers)
+#     if responsePosts.status_code!=200:
+#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post no encontrado")
+#     return db.query(Tags).filter(Tags.post_id==post_id).all()
+
 app.include_router(router)

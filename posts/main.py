@@ -164,6 +164,36 @@ async def create_post_tag(post_id:int, tag_id:int, db: db_dependency, request: R
     db.refresh(db_post)
     return db_post
 
+#Obtener los tags de un post
+@app.get("/posts/{post_id}/tags", status_code=status.HTTP_200_OK)
+async def get_tags(post_id:int,db: db_dependency, request: Request=None):
+    headers=dict(request.headers)
+    authHeader= request.headers.get("Authorization")
+    if not authHeader:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No hay token")
+    url = f"http://{conf.USERS_PATH}/"
+    headers = {"Authorization": f"{authHeader}"}
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url, headers=headers)
+    if response.status_code!=200:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalido")
+    db_post=db.query(models.Post).filter(models.Post.id== post_id).first()
+    if not db_post:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post no encontrado")
+    allTags=db.query(models.PostTags).filter(models.PostTags.idPost==post_id).all()
+    tag_ids = [tag.idTag for tag in allTags]
+    tags_info = []
+    for tag_id in tag_ids:
+        url = f"http://{conf.TAGS_PATH}/tags/{tag_id}"
+        response = httpx.get(url, headers=headers)
+        if response.status_code == 200:
+            tags_info.append(response.json()) 
+        else:
+            print(f"Error al obtener el tag {tag_id}: {response.status_code}")
+    
+    return tags_info
+    
+
     
 
 
