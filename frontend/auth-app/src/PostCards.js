@@ -8,19 +8,22 @@ const PostCards = () => {
     const [posts, setPosts] = useState([]); // Estado para almacenar los posts
     const navigate = useNavigate();
     useEffect(() => {
-        axios.get("http://localhost:8080/users/posts", { 
+        console.log("Probando con fetch()...");
+    
+        fetch("http://localhost:8080/users/posts", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
-            },
-            withCredentials: true
+            }
         })
-        .then(response => setPosts(response.data))
+        .then(response => response.json())
+        .then(data => {
+            console.log("Respuesta fetch:", data);
+            setPosts(data);
+        })
         .catch(error => {
-            console.error(error);
-            localStorage.removeItem("token");
-            navigate("/");
+            console.error("Error con fetch():", error);
         });
-    }, []);
+    }, [navigate]);
 
     return (
         <Container className="mt-4">
@@ -31,7 +34,12 @@ const PostCards = () => {
                             <Card.Body>
                                 <Card.Text>{post.titulo}</Card.Text>
                                 <Card.Text>{post.fechaPublicacion}</Card.Text>
-                                <Button variant="primary">Ver más</Button>
+                                <Button 
+                                variant="primary"
+                                onClick={() => navigate(`/post/${post.id}`)}
+                            >
+                                Ver más
+                            </Button>
                             </Card.Body>
                         </Card>
                     </Col>
