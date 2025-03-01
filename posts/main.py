@@ -141,8 +141,6 @@ async def get_posts(db:db_dependency, request: Request):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalido")
     idUsuario=response.json()['User']['id']
     db_post=db.query(models.Post).filter(models.Post.idUsuario== idUsuario).all()
-    if not db_post:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post no encontrado")
     return db_post
 
 
