@@ -199,8 +199,33 @@ async def get_tags(post_id:int,db: db_dependency, request: Request=None):
     
     return tags_info
     
+#post por tag    
+@app.get("/posts/tags/{tag_id}", status_code=status.HTTP_200_OK)
+async def get_posts_by_tag(tag_id: int, db: db_dependency, request: Request):
+    headers = dict(request.headers)
+    authHeader = request.headers.get("Authorization")
+    if not authHeader:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No hay token")
 
-    
+    # Verificar el token con USERS_PATH
+    url = f"http://{conf.USERS_PATH}/"
+    headers = {"Authorization": f"{authHeader}"}
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url, headers=headers)
+
+    if response.status_code != 200:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token inválido")
+
+    # Obtener todos los posts que tienen el tag especificado
+    post_tags = db.query(models.PostTags).filter(models.PostTags.idTag == tag_id).all()
+    if not post_tags:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No hay posts con este tag")
+
+    # Obtener los IDs de los posts con este tag
+    post_ids = [pt.idPost for pt in post_tags]
+    posts = db.query(models.Post).filter(models.Post.id.in_(post_ids)).all()
+
+    return posts
 
 
 
