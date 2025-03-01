@@ -120,11 +120,11 @@ function PostDetail() {
         <Container className="mt-4">
             <Card>
                 <Card.Body>
-                    <Card.Title>{post.id}</Card.Title>
+                    <Card.Title>{post.titulo}</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">
                         Published on {new Date(post.fechaPublicacion).toLocaleDateString()}
                     </Card.Subtitle>
-                    <Card.Text>{post.titulo}</Card.Text>
+                    <Card.Text>{post.contenido}</Card.Text>
 
                     {/* 🔹 Sección de Tags en forma de # */}
                     <div className="mb-3">

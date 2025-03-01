@@ -8,6 +8,7 @@ function PostUpdate() {
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
     const [newTitle, setNewTitle] = useState(""); // Estado para el nuevo título
+    const [newContent, setNewContent] = useState(""); // Estado para el nuevo título
     const verifyToken = async () => {
         const token = localStorage.getItem("token");
 
@@ -43,7 +44,8 @@ function PostUpdate() {
 
                 const data = await response.json();
                 setPost(data);
-                setNewTitle(data.titulo); // Inicializar el título con el valor actual
+                setNewTitle(data.titulo);
+                setNewContent(data.contenido); // Inicializar el título con el valor actual
             } catch (error) {
                 console.error(error);
                 navigate("/protected");
@@ -65,7 +67,7 @@ function PostUpdate() {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify({ titulo: newTitle }),
+                body: JSON.stringify({ titulo: newTitle, contenido: newContent }),
             });
 
             if (!response.ok) throw new Error("Failed to update post");
@@ -108,11 +110,20 @@ function PostUpdate() {
 
                     {/* Campo para editar el título */}
                     <Form.Group className="mb-3">
-                        <Form.Label>Edit Title</Form.Label>
+                        <Form.Label>Editar Titulo</Form.Label>
                         <Form.Control
                             type="text"
                             value={newTitle}
                             onChange={(e) => setNewTitle(e.target.value)}
+                        />
+                    </Form.Group>
+                    
+                    <Form.Group className="mb-3">
+                        <Form.Label>Editar Contenido</Form.Label>
+                        <Form.Control
+                            type="text"
+                            value={newContent}
+                            onChange={(e) => setNewContent(e.target.value)}
                         />
                     </Form.Group>
 

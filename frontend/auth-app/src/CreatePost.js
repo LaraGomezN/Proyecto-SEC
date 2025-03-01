@@ -5,6 +5,7 @@ import { Navbar, Nav, Container, Button, Form } from "react-bootstrap";
 function CreatePost() {
     const navigate = useNavigate();
     const [titulo, setTitulo] = useState("");
+    const [contenido, setContenido] = useState("");
     const [tags, setTags] = useState([]);
     const [selectedTag, setSelectedTag] = useState("");
 
@@ -45,6 +46,7 @@ function CreatePost() {
 
         const newPost = {
             titulo,
+            contenido
         };
 
         try {
@@ -89,12 +91,23 @@ function CreatePost() {
                 <Form onSubmit={handleSubmit}>
                     {/* Campo de contenido */}
                     <Form.Group controlId="titulo">
-                        <Form.Label>Contenido</Form.Label>
+                        <Form.Label>Titulo</Form.Label>
                         <Form.Control
                             as="textarea"
                             rows={3}
                             value={titulo}
                             onChange={(e) => setTitulo(e.target.value)}
+                            required
+                        />
+                    </Form.Group>
+
+                    <Form.Group controlId="contenido">
+                        <Form.Label>Contenido</Form.Label>
+                        <Form.Control
+                            as="textarea"
+                            rows={3}
+                            value={contenido}
+                            onChange={(e) => setContenido(e.target.value)}
                             required
                         />
                     </Form.Group>

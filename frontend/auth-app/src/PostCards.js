@@ -37,7 +37,9 @@ const PostCards = () => {
                     <Col key={post.id} md={4} className="mb-4">
                         <Card>
                             <Card.Body>
-                                <Card.Text>{post.titulo}</Card.Text>
+                                {console.log(post)}
+                                <Card.Title>{post.titulo}</Card.Title>
+                                <Card.Text>{post.contenido}</Card.Text>
                                 <Card.Text>Publicado el {formatFecha(post.fechaPublicacion)}</Card.Text>
                                 <Button variant="success" className="me-3" onClick={() => navigate(`/post/${post.id}`)}>
                                     Ver más
