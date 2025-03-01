@@ -1,29 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, Button, Card, Spinner, Form } from "react-bootstrap";
+import ReactQuill from "react-quill-new"; // Importar la versión compatible con React 19
+import "react-quill-new/dist/quill.snow.css"; // Estilos de Quill
 
 function PostUpdate() {
     const { postId } = useParams();
     const navigate = useNavigate();
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [newTitle, setNewTitle] = useState(""); // Estado para el nuevo título
-    const [newContent, setNewContent] = useState(""); // Estado para el nuevo título
-    const verifyToken = async () => {
-        const token = localStorage.getItem("token");
+    const [newTitle, setNewTitle] = useState("");
+    const [newContent, setNewContent] = useState("");
 
-        try {
-            const response = await fetch(`http://localhost:8000/auth/verify-token/${token}`);
+    useEffect(() => {
+        const verifyToken = async () => {
+            const token = localStorage.getItem("token");
 
-            if (!response.ok) {
-                throw new Error("Token verification failed");
+            try {
+                const response = await fetch(`http://localhost:8000/auth/verify-token/${token}`);
+
+                if (!response.ok) {
+                    throw new Error("Token verification failed");
+                }
+            } catch (error) {
+                localStorage.removeItem("token");
+                navigate("/");
             }
-        } catch (error) {
-            localStorage.removeItem("token");
-            navigate("/");
-        }
-    };
-    verifyToken();
+        };
+
+        verifyToken();
+    }, [navigate]);
+
     useEffect(() => {
         const fetchPostDetail = async () => {
             const token = localStorage.getItem("token");
@@ -45,7 +52,7 @@ function PostUpdate() {
                 const data = await response.json();
                 setPost(data);
                 setNewTitle(data.titulo);
-                setNewContent(data.contenido); // Inicializar el título con el valor actual
+                setNewContent(data.contenido);
             } catch (error) {
                 console.error(error);
                 navigate("/protected");
@@ -75,7 +82,7 @@ function PostUpdate() {
             const updatedPost = await response.json();
             setPost(updatedPost);
             alert("Post updated successfully!");
-            navigate("/protected"); 
+            navigate("/protected");
         } catch (error) {
             console.error("Error updating post:", error);
         }
@@ -103,32 +110,42 @@ function PostUpdate() {
         <Container className="mt-4">
             <Card>
                 <Card.Body>
-                    <Card.Title>Post ID: {post.id}</Card.Title>
+                    <Card.Title> {post.titulo}</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">
                         Published on {new Date(post.fechaPublicacion).toLocaleString()}
                     </Card.Subtitle>
 
-                    {/* Campo para editar el título */}
+                    {/* 🔹 Vista previa con formato */}
+                    <div className="mb-3">
+                        <h5>Vista Previa del Contenido:</h5>
+                        <div 
+                            className="border p-2 rounded"
+                            dangerouslySetInnerHTML={{ __html: post.contenido }} 
+                        />
+                    </div>
+
+                    {/* 🔹 Campo para editar el título */}
                     <Form.Group className="mb-3">
-                        <Form.Label>Editar Titulo</Form.Label>
+                        <Form.Label>Editar Título</Form.Label>
                         <Form.Control
                             type="text"
                             value={newTitle}
                             onChange={(e) => setNewTitle(e.target.value)}
                         />
                     </Form.Group>
-                    
+
+                    {/* 🔹 Editor WYSIWYG usando la nueva versión de `react-quill` */}
                     <Form.Group className="mb-3">
                         <Form.Label>Editar Contenido</Form.Label>
-                        <Form.Control
-                            type="text"
+                        <ReactQuill 
+                            theme="snow"
                             value={newContent}
-                            onChange={(e) => setNewContent(e.target.value)}
+                            onChange={setNewContent}
                         />
                     </Form.Group>
 
-                    <Button onClick={handleUpdatePost} variant="success">Update Post</Button>
-                    <Button onClick={() => navigate("/protected")} variant="secondary" className="ms-2">Back</Button>
+                    <Button onClick={handleUpdatePost} variant="success">Actualizar Post</Button>
+                    <Button onClick={() => navigate("/protected")} variant="secondary" className="ms-2">Atrás</Button>
                 </Card.Body>
             </Card>
         </Container>

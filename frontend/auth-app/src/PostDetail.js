@@ -111,7 +111,7 @@ function PostDetail() {
         return (
             <Container className="text-center mt-5">
                 <h3>Post not found</h3>
-                <Button onClick={() => navigate("/protected")} variant="primary">Go Back</Button>
+                <Button onClick={() => navigate(-1)} variant="primary">Go Back</Button>
             </Container>
         );
     }
@@ -124,7 +124,9 @@ function PostDetail() {
                     <Card.Subtitle className="mb-2 text-muted">
                         Published on {new Date(post.fechaPublicacion).toLocaleDateString()}
                     </Card.Subtitle>
-                    <Card.Text>{post.contenido}</Card.Text>
+                    
+                    {/* 🔹 Interpretar el HTML dentro del contenido */}
+                    <Card.Text dangerouslySetInnerHTML={{ __html: post.contenido }} />
 
                     {/* 🔹 Sección de Tags en forma de # */}
                     <div className="mb-3">
@@ -139,7 +141,7 @@ function PostDetail() {
                         )}
                     </div>
 
-                    <Button onClick={() => navigate("/protected")} variant="secondary">Back</Button>
+                    <Button onClick={() => navigate(-1)} variant="secondary">Back</Button>
                 </Card.Body>
             </Card>
 

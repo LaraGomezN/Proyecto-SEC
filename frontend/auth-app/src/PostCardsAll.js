@@ -2,6 +2,12 @@ import { Card, Button, Row, Col, Container, Badge } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 
+// Función para eliminar etiquetas HTML del contenido
+const stripTags = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent || "";
+};
+
 const PostCardsAll = () => {
     const [posts, setPosts] = useState([]);
     const [users, setUsers] = useState({});
@@ -133,7 +139,8 @@ const PostCardsAll = () => {
                             <Card>
                                 <Card.Body>
                                     <Card.Title>{post.titulo}</Card.Title>
-                                    <Card.Text>{post.contenido}</Card.Text>
+                                    {/* 🔹 Mostrar contenido sin etiquetas HTML */}
+                                    <Card.Text>{stripTags(post.contenido)}</Card.Text>
                                     <Card.Text>Publicado el {formatFecha(post.fechaPublicacion)}</Card.Text>
                                     <Card.Text>Autor: {users[post.idUsuario] || "Cargando..."}</Card.Text>
                                     <Button variant="success" className="me-3" onClick={() => navigate(`/post/${post.id}`)}>

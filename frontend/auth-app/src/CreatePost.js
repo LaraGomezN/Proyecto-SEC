@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Navbar, Nav, Container, Button, Form } from "react-bootstrap";
+import { Container, Button, Form } from "react-bootstrap";
+import ReactQuill from "react-quill-new"; // Importar la versión compatible con React 19
+import "react-quill-new/dist/quill.snow.css"; // Estilos de Quill
 
 function CreatePost() {
     const navigate = useNavigate();
     const [titulo, setTitulo] = useState("");
-    const [contenido, setContenido] = useState("");
+    const [contenido, setContenido] = useState(""); // Ahora con ReactQuill
     const [tags, setTags] = useState([]);
     const [selectedTag, setSelectedTag] = useState("");
 
@@ -29,7 +31,7 @@ function CreatePost() {
         verifyToken();
 
         // Cargar la lista de tags desde la API
-        fetch("http://localhost:8081/tags",{
+        fetch("http://localhost:8081/tags", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -58,25 +60,28 @@ function CreatePost() {
                 },
                 body: JSON.stringify(newPost)
             });
-            console.log(newPost)
+
             if (!response.ok) {
                 throw new Error("Error al crear el post");
             }
+
             const jsonResponse = await response.json();
-            const valueReturned= Number(jsonResponse.id)
-            const tagId = Number(selectedTag)
-            const responseTag  = await fetch(`http://localhost:8080/posts/${valueReturned}/tags/${tagId}`, {
+            const valueReturned = Number(jsonResponse.id);
+            const tagId = Number(selectedTag);
+
+            const responseTag = await fetch(`http://localhost:8080/posts/${valueReturned}/tags/${tagId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
             });
+
             if (!responseTag.ok) {
                 throw new Error("Error al asociar el tag con el post");
             }
 
-            navigate("/protected"); 
+            navigate("/protected");
         } catch (error) {
             console.error("Error:", error);
         }
@@ -84,31 +89,28 @@ function CreatePost() {
 
     return (
         <>
-
-            {/* Formulario */}
             <Container className="mt-4">
                 <h2>Crear un Nuevo Post</h2>
                 <Form onSubmit={handleSubmit}>
-                    {/* Campo de contenido */}
+                    {/* Campo de título */}
                     <Form.Group controlId="titulo">
                         <Form.Label>Titulo</Form.Label>
                         <Form.Control
-                            as="textarea"
-                            rows={3}
+                            type="text"
                             value={titulo}
                             onChange={(e) => setTitulo(e.target.value)}
                             required
                         />
                     </Form.Group>
 
-                    <Form.Group controlId="contenido">
+                    {/* Editor WYSIWYG para Contenido */}
+                    <Form.Group controlId="contenido" className="mt-3">
                         <Form.Label>Contenido</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            rows={3}
+                        <ReactQuill 
+                            theme="snow"
                             value={contenido}
-                            onChange={(e) => setContenido(e.target.value)}
-                            required
+                            onChange={setContenido}
+                            placeholder="Escribe aquí tu post..."
                         />
                     </Form.Group>
 
@@ -135,7 +137,7 @@ function CreatePost() {
                         Publicar Post
                     </Button>
 
-                    <Button variant="secondary" type="submit" className="mt-3" onClick={() => navigate(`/protected`)} >
+                    <Button variant="secondary" className="mt-3" onClick={() => navigate(`/protected`)}>
                         Atrás
                     </Button>
                 </Form>
@@ -145,3 +147,4 @@ function CreatePost() {
 }
 
 export default CreatePost;
+
