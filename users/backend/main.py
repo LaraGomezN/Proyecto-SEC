@@ -38,12 +38,12 @@ async def createUser(user: UserBase, db: db_dependency):
     db.refresh(db_user)"""
 
 #GET
-"""@app.get("/users/{user_id}")
+@app.get("/users/{user_id}")
 async def getUser(user_id: int, db: db_dependency):
     result = db.query(models.Users).filter(models.Users.id == user_id).first()
     if not result:
         raise HTTPException(status_code=404, deatil='Usuario no encontrado')
-    return result"""
+    return result
 
 
 #GET con validacion

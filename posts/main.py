@@ -20,6 +20,7 @@ app.add_middleware(
 
 class PostInput(BaseModel):
     titulo: str
+    contenido:str
 
 
 
@@ -46,7 +47,7 @@ async def create_posts(post: PostInput, db: db_dependency, request: Request):
     if not post.titulo:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Faltan campos")
     idUsuario=response.json()['User']['id']
-    db_post=models.Post(titulo=post.titulo, idUsuario=idUsuario)
+    db_post = models.Post(titulo=post.titulo, contenido=post.contenido, idUsuario=idUsuario)
     db.add(db_post)
     db.commit()
     db.refresh(db_post)
@@ -70,6 +71,7 @@ async def update_posts(post_id:int,post: PostInput, db: db_dependency, request: 
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post no encontrado")
     idUsuario=response.json()['User']['id']
     db_post.titulo=post.titulo
+    db_post.contenido=post.contenido
     db_post.idUsuario=idUsuario
     db.commit()
     db.refresh(db_post)
