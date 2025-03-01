@@ -30,12 +30,12 @@ db_dependency = Annotated[Session, Depends(get_db)]
 user_dependency = Annotated[dict, Depends(get_current_user)]
 
 #POST
-"""@app.post("/users")
+@app.post("/users")
 async def createUser(user: UserBase, db: db_dependency):
     db_user = models.Users(name = user.name, email = user.email, password = user.password)
     db.add(db_user)
     db.commit()
-    db.refresh(db_user)"""
+    db.refresh(db_user)
 
 #GET
 @app.get("/users/{user_id}")
