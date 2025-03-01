@@ -2,12 +2,12 @@ import { Card, Button, Row, Col, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 
-const PostCards = () => {
+const PostCardsAll = () => {
     const [posts, setPosts] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch("http://localhost:8080/users/posts", {
+        fetch("http://localhost:8080/posts", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             }
@@ -42,9 +42,6 @@ const PostCards = () => {
                                 <Button variant="success" className="me-3" onClick={() => navigate(`/post/${post.id}`)}>
                                     Ver más
                                 </Button>
-                                <Button variant="primary" className="me-3" onClick={() => navigate(`/updatePost/${post.id}`)}>
-                                    Actualizar
-                                </Button>
                             </Card.Body>
                         </Card>
                     </Col>
@@ -54,4 +51,4 @@ const PostCards = () => {
     );
 };
 
-export default PostCards;
+export default PostCardsAll;

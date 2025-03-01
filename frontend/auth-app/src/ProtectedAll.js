@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
-import PostCards from "./PostCards";
+import PostCardsAll from "./PostCardsAll";
 
-function ProtectedPage() {
+function ProtectedPageAll() {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -29,29 +29,23 @@ function ProtectedPage() {
         <>
             {/* Navbar */}
             <Navbar bg="dark" variant="dark" expand="lg">
-                <Container>
-                    <Navbar.Brand href="#">Mis Posts</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="me-auto">
-                            
-                            <Nav.Link href="/protectedAll">Posts</Nav.Link>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
+    <Container>
+        <Nav className="d-flex align-items-center">
+            <Nav.Link href="/protected" className="me-3">Mis Posts</Nav.Link>
+            <Navbar.Brand href="#">Posts</Navbar.Brand>
+        </Nav>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+    </Container>
+</Navbar>
 
             {/* Contenido de la Página */}
             <Container className="mt-4">
-                <h2>Bienvenido a tus posts</h2>
+                <h2>Bienvenido a todos los posts</h2>
                 <p>Solo los usuarios autenticados pueden ver esta página.</p>
-                <PostCards />
-                <Button variant="btn btn-success" onClick={() => navigate(`/createPosts`)}
->               Agregar Posts                
-                </Button>
+                <PostCardsAll />
             </Container>
         </>
     );
 }
 
-export default ProtectedPage;
+export default ProtectedPageAll;
