@@ -1,6 +1,7 @@
 import { Card, Button, Row, Col, Container, Badge } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
+import ROUTES from "./routes";
 
 // Función para eliminar etiquetas HTML del contenido
 const stripTags = (html) => {
@@ -17,9 +18,9 @@ const PostCardsAll = () => {
 
     // Función para obtener los posts, con o sin filtro de tags
     const fetchPosts = async (tagId = null) => {
-        let url = "http://localhost:8080/posts";
+        let url = `http://${ROUTES.POSTPATH}/posts`;
         if (tagId) {
-            url = `http://localhost:8080/posts/tags/${tagId}`;
+            url = `http://${ROUTES.POSTPATH}/posts/tags/${tagId}`;
         }
 
         try {
@@ -42,7 +43,7 @@ const PostCardsAll = () => {
     // Función para obtener la lista de tags disponibles
     const fetchTags = async () => {
         try {
-            const response = await fetch("http://localhost:8081/tags", {
+            const response = await fetch(`http://${ROUTES.TAGPATH}/tags`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
             });
 
@@ -76,7 +77,7 @@ const PostCardsAll = () => {
 
         Promise.all(
             idsParaBuscar.map(id =>
-                fetch(`http://localhost:8000/users/${id}`, {
+                fetch(`http://${ROUTES.USERPATH}/users/${id}`, {
                     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
                 })
                 .then(response => response.json())

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, Button, Card, Spinner, Form, ListGroup, Badge } from "react-bootstrap";
+import ROUTES from "./routes";
 
 function PostDetail() {
     const { postId } = useParams(); // Obtiene el ID del post desde la URL
@@ -23,7 +24,7 @@ function PostDetail() {
 
             try {
                 // Obtener el post
-                const response = await fetch(`http://localhost:8080/posts/${postId}`, {
+                const response = await fetch(`http://${ROUTES.POSTPATH}/posts/${postId}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
@@ -35,7 +36,7 @@ function PostDetail() {
                 setPost(data);
 
                 // 🔹 Obtener solo las reviews del post actual
-                const reviewsResponse = await fetch(`http://localhost:8082/posts/${postId}/reviews`, {
+                const reviewsResponse = await fetch(`http://${ROUTES.REVIEWPATH}/posts/${postId}/reviews`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
@@ -47,7 +48,7 @@ function PostDetail() {
                 }
 
                 // 🔹 Obtener los tags del post actual
-                const tagsResponse = await fetch(`http://localhost:8080/posts/${postId}/tags`, {
+                const tagsResponse = await fetch(`http://${ROUTES.POSTPATH}/posts/${postId}/tags`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
@@ -73,7 +74,7 @@ function PostDetail() {
         const token = localStorage.getItem("token");
 
         try {
-            const response = await fetch("http://localhost:8082/reviews/", {
+            const response = await fetch(`http://${ROUTES.REVIEWPATH}/reviews/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

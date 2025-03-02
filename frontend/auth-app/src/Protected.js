@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import PostCards from "./PostCards";
+import ROUTES from "./routes";
 
 function ProtectedPage() {
     const navigate = useNavigate();
@@ -11,7 +12,7 @@ function ProtectedPage() {
             const token = localStorage.getItem("token");
 
             try {
-                const response = await fetch(`http://localhost:8000/auth/verify-token/${token}`);
+                const response = await fetch(`http://${ROUTES.USERPATH}/auth/verify-token/${token}`);
 
                 if (!response.ok) {
                     throw new Error("Token verification failed");

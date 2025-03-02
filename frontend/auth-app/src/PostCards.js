@@ -1,6 +1,7 @@
 import { Card, Button, Row, Col, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
+import ROUTES from "./routes";
 
 // 🔹 Función para eliminar etiquetas HTML y dejar solo el texto
 const stripTags = (html) => {
@@ -14,7 +15,7 @@ const PostCards = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch("http://localhost:8080/users/posts", {
+        fetch(`http://${ROUTES.POSTPATH}/users/posts`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             }
@@ -40,7 +41,7 @@ const PostCards = () => {
 
         Promise.all(
             idsParaBuscar.map(id =>
-                fetch(`http://localhost:8000/users/${id}`, {
+                fetch(`http://${ROUTES.USERPATH}/users/${id}`, {
                     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
                 })
                 .then(response => response.json())
@@ -74,7 +75,7 @@ const PostCards = () => {
         if (!confirmDelete) return;
 
         try {
-            const response = await fetch(`http://localhost:8080/posts/${postId}`, {
+            const response = await fetch(`http://${ROUTES.POSTPATH}/posts/${postId}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`

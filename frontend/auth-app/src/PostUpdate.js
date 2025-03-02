@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Container, Button, Card, Spinner, Form } from "react-bootstrap";
 import ReactQuill from "react-quill-new"; // Importar la versión compatible con React 19
 import "react-quill-new/dist/quill.snow.css"; // Estilos de Quill
+import ROUTES from "./routes";
 
 function PostUpdate() {
     const { postId } = useParams();
@@ -17,7 +18,7 @@ function PostUpdate() {
             const token = localStorage.getItem("token");
 
             try {
-                const response = await fetch(`http://localhost:8000/auth/verify-token/${token}`);
+                const response = await fetch(`http://${ROUTES.USERPATH}/auth/verify-token/${token}`);
 
                 if (!response.ok) {
                     throw new Error("Token verification failed");
@@ -41,7 +42,7 @@ function PostUpdate() {
             }
 
             try {
-                const response = await fetch(`http://localhost:8080/posts/${postId}`, {
+                const response = await fetch(`http://${ROUTES.POSTPATH}/posts/${postId}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
@@ -68,7 +69,7 @@ function PostUpdate() {
         const token = localStorage.getItem("token");
 
         try {
-            const response = await fetch(`http://localhost:8080/posts/${postId}`, {
+            const response = await fetch(`http://${ROUTES.POSTPATH}/posts/${postId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

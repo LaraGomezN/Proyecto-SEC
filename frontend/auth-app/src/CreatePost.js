@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Container, Button, Form, InputGroup } from "react-bootstrap";
 import ReactQuill from "react-quill-new"; // Importar la versión compatible con React 19
 import "react-quill-new/dist/quill.snow.css"; // Estilos de Quill
+import ROUTES from "./routes";
 
 function CreatePost() {
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ function CreatePost() {
             const token = localStorage.getItem("token");
 
             try {
-                const response = await fetch(`http://localhost:8000/auth/verify-token/${token}`);
+                const response = await fetch(`http://${ROUTES.USERPATH}/auth/verify-token/${token}`);
 
                 if (!response.ok) {
                     throw new Error("Token verification failed");
@@ -32,7 +33,7 @@ function CreatePost() {
         verifyToken();
 
         // Cargar la lista de tags desde la API
-        fetch("http://localhost:8081/tags", {
+        fetch(`http://${ROUTES.TAGPATH}/tags`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -51,7 +52,7 @@ function CreatePost() {
         const token = localStorage.getItem("token");
 
         try {
-            const response = await fetch("http://localhost:8081/tags", {
+            const response = await fetch(`http://${ROUTES.TAGPATH}/tags`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -83,7 +84,7 @@ function CreatePost() {
         };
 
         try {
-            const response = await fetch("http://localhost:8080/posts", {
+            const response = await fetch(`http://${ROUTES.POSTPATH}/posts`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
