@@ -68,6 +68,31 @@ const PostCards = () => {
         }).format(fecha);
     };
 
+    // 🔹 Función para eliminar un post
+    const handleDeletePost = async (postId) => {
+        const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este post?");
+        if (!confirmDelete) return;
+
+        try {
+            const response = await fetch(`http://localhost:8080/posts/${postId}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error("Error al eliminar el post");
+            }
+
+            // 🔹 Actualizar la lista de posts sin recargar la página
+            setPosts(posts.filter(post => post.id !== postId));
+
+        } catch (error) {
+            console.error("Error eliminando el post:", error);
+        }
+    };
+
     return (
         <Container className="mt-4">
             <Row>
@@ -84,7 +109,7 @@ const PostCards = () => {
                                     {/* 🔹 Botón para ver más detalles */}
                                     <Button 
                                         variant="success" 
-                                        className="me-3" 
+                                        className="me-2" 
                                         onClick={() => navigate(`/post/${post.id}`)}
                                     >
                                         Ver más
@@ -93,9 +118,18 @@ const PostCards = () => {
                                     {/* 🔹 Botón para actualizar (editar) el post */}
                                     <Button 
                                         variant="primary" 
+                                        className="me-2"
                                         onClick={() => navigate(`/updatePost/${post.id}`)}
                                     >
-                                        Actualizar
+                                        Editar
+                                    </Button>
+
+                                    {/* 🔹 Botón para eliminar el post */}
+                                    <Button 
+                                        variant="danger" 
+                                        onClick={() => handleDeletePost(post.id)}
+                                    >
+                                        Eliminar
                                     </Button>
                                 </Card.Body>
                             </Card>
@@ -110,4 +144,3 @@ const PostCards = () => {
 };
 
 export default PostCards;
-

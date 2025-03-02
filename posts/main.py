@@ -31,6 +31,7 @@ def get_db():
     finally:
         db.close()
 
+# crear post
 db_dependency= Annotated[Session, Depends(get_db)]
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
 async def create_posts(post: PostInput, db: db_dependency, request: Request):
@@ -53,7 +54,7 @@ async def create_posts(post: PostInput, db: db_dependency, request: Request):
     db.refresh(db_post)
     return db_post
 
-
+# actualizar post
 @app.put("/posts/{post_id}", status_code=status.HTTP_200_OK)
 async def update_posts(post_id:int,post: PostInput, db: db_dependency, request: Request):
     headers=dict(request.headers)
@@ -77,6 +78,7 @@ async def update_posts(post_id:int,post: PostInput, db: db_dependency, request: 
     db.refresh(db_post)
     return db_post
 
+# listar posts
 @app.get("/posts" ,status_code=status.HTTP_200_OK)
 async def get_posts(db:db_dependency, request: Request):
     headers=dict(request.headers)
