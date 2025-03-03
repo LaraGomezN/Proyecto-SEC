@@ -1,6 +1,8 @@
 # **Documentación del Proyecto-SEC**
 
 ## **1. Introducción**
+### Video demostración funcional de la aplicación
+![Enlace al video](https://www.youtube.com/watch?v=uLrWr5wCRJI)
 Proyecto-SEC es una plataforma web diseñada para la gestión de publicaciones con etiquetas, autenticación de usuarios y sistema de reseñas. Su objetivo principal es proporcionar un espacio donde los usuarios puedan crear, visualizar, editar y eliminar publicaciones, así como interactuar a través de comentarios y puntuaciones.
 
 ---
