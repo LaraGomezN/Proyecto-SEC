@@ -152,6 +152,15 @@ Se aceptan contribuciones bajo las siguientes reglas:
 3. **Realizar los cambios y hacer commit**.
 4. **Abrir un Pull Request** para revisión.
 
+## **9. Tutorial despligue**
+
+Se aceptan contribuciones bajo las siguientes reglas:
+
+1. Se debe realizar un git clone del repositorio en donde se va a crear la aplicación
+2. Dentro de la carpeta del clone hay un archivo docker-compose.yml
+3. **Realizar los cambios y hacer commit**.
+4. **Abrir un Pull Request** para revisión.
+
 ---
 
 ## **9. Licencia**
