@@ -76,7 +76,8 @@ El modelo de datos del sistema está diseñado en PostgreSQL con las siguientes 
 - **Relaciones Post-Tags (`post_tags`)**: Relaciona las publicaciones con sus etiquetas.
 
 ### **Esquema Relacional**
-_(Aquí se insertará una imagen con el diagrama de base de datos)_
+![image](https://github.com/user-attachments/assets/6a368e4e-5bba-466d-9e1f-a608e8884fc2)
+_
 
 ---
 
