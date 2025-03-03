@@ -62,6 +62,9 @@ Cada servicio expone diferentes endpoints para su gestión.
 - `GET /tags`: Obtiene todas las etiquetas disponibles.
 - `POST /posts/{post_id}/tags/{tag_id}`: Asigna una etiqueta a una publicación.
 - `GET /posts/{post_id}/tags`: Obtiene las etiquetas asociadas a un post.
+### ** Diagrama componentes**
+![image](https://github.com/user-attachments/assets/5eba2d58-620f-4b5d-b5d8-2f3c036754c3)
+
 
 ---
 
@@ -161,7 +164,8 @@ Se aceptan contribuciones bajo las siguientes reglas:
 3. Una vez los contenedores esten corriendo dentro de la carpeta frontend/auth-app ejecutamos el comando npm install y esperamos que todas las dependencias se instalen
 4. Con todas las dependencias instaladas ejecutamos npm start y esperamos que se nos abra la página del navegador que por defecto es localhost:3000 allí deberiamos estar dentro de la página de registro y podemos empezar a utilizar el app
 
-![Diagrama en blanco (11)](https://github.com/user-attachments/assets/5ef8ac7b-91c0-4c69-b249-85735e0af777)
+![Diagrama en blanco (3)](https://github.com/user-attachments/assets/4727efff-1c69-4eda-b5e9-59d138271f51)
+)
 
 ---
 
