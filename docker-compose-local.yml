@@ -1,0 +1,192 @@
+version: "3.8"
+
+services:
+  user-db:
+    image: postgres:15
+    container_name: user-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+    networks:
+      - user_net
+
+  user-management:
+    build: ./users
+    container_name: user-management
+    ports:
+      - "3000:3000"
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_HOST: user-db
+      DB_PORT: 5432
+      DB_NAME: mydatabase
+      USERS_PATH: http://localhost:3000
+    depends_on:
+      - user-db
+    networks:
+      - user_net
+      - app_net
+
+
+  post-db:
+    image: postgres:15
+    container_name: post-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123abc
+      POSTGRES_DB: postsDB
+    ports:
+      - "5433:5432"
+    networks:
+      - post_net
+
+  post-management:
+    build: ./posts
+    container_name: post-management
+    ports:
+      - "3001:3001"
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: 123abc
+      DB_HOST: post-db
+      DB_PORT: 5432
+      DB_NAME: postsDB
+      USERS_PATH: http://user-management:3000
+    depends_on:
+      - post-db
+    networks:
+      - post_net
+      - app_net
+
+
+  offer-db:
+    image: postgres:15
+    container_name: offer-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: offer
+    ports:
+      - "5434:5432"
+    networks:
+      - offer_net
+
+  offer-management:
+    build: ./offers
+    container_name: offer-management
+    ports:
+      - "3003:3003"
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: root
+      DB_HOST: offer-db
+      DB_PORT: 5432
+      DB_NAME: offer
+      USERS_PATH: http://user-management:3000
+    depends_on:
+      - offer-db
+    networks:
+      - offer_net
+      - app_net
+
+
+  route-db:
+    image: postgres:15
+    container_name: route-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: route
+    ports:
+      - "5435:5432"
+    networks:
+      - route_net
+
+  route-management:
+    build: ./routes
+    container_name: route-management
+    ports:
+      - "3002:3002"
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: root
+      DB_HOST: route-db
+      DB_PORT: 5432
+      DB_NAME: route
+      USERS_PATH: http://user-management:3000
+    depends_on:
+      - route-db
+    networks:
+      - route_net
+      - app_net
+
+
+  rf003:
+    build: ./rf003
+    container_name: rf003
+    ports:
+      - "3004:3004"
+    environment:
+      USERS_PATH: http://user-management:3000
+      POSTS_PATH: http://post-management:3001
+      ROUTES_PATH: http://route-management:3002
+      OFFERS_PATH: http://offer-management:3003
+    networks:
+      - app_net
+
+  rf004:
+    build: ./rf004
+    container_name: rf004
+    ports:
+      - "3005:3005"
+    environment:
+      USERS_PATH: http://user-management:3000
+      POSTS_PATH: http://post-management:3001
+      ROUTES_PATH: http://route-management:3002
+      OFFERS_PATH: http://offer-management:3003
+      SCORE_PATH: http://score-management:3007
+    networks:
+      - app_net
+
+  rf005:
+    build: ./rf005
+    container_name: rf005
+    ports:
+      - "3006:3006"
+    environment:
+      USERS_PATH: http://user-management:3000
+      POSTS_PATH: http://post-management:3001
+      ROUTES_PATH: http://route-management:3002
+      OFFERS_PATH: http://offer-management:3003
+      SCORE_PATH: http://score-management:3007
+    networks:
+      - app_net
+
+  score-management:
+    build: ./scoreTest
+    container_name: score-management
+    ports:
+      - "3007:3007"
+    environment:
+      USERS_PATH: http://user-management:3000
+      POSTS_PATH: http://post-management:3001
+      ROUTES_PATH: http://route-management:3002
+      OFFERS_PATH: http://offer-management:3003
+    networks:
+      - app_net
+
+networks:
+  user_net:
+    driver: bridge
+  post_net:
+    driver: bridge
+  offer_net:
+    driver: bridge
+  route_net:
+    driver: bridge
+  app_net:
+    driver: bridge
