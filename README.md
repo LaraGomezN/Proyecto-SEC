@@ -160,6 +160,9 @@ Se aceptan contribuciones bajo las siguientes reglas:
 2. Dentro de la carpeta del clone hay un archivo docker-compose-local.yml, este archivo se ejecuta para hacer una prueba local así levantando todas las bases de datos y los microservicios necesarios para que la aplicación funcione. `docker-compose-local.yml`. Con esto se revisa que no existan errores a la hora de crear los contenedores
 3. Una vez los contenedores esten corriendo dentro de la carpeta frontend/auth-app ejecutamos el comando npm install y esperamos que todas las dependencias se instalen
 4. Con todas las dependencias instaladas ejecutamos npm start y esperamos que se nos abra la página del navegador que por defecto es localhost:3000 allí deberiamos estar dentro de la página de registro y podemos empezar a utilizar el app
+
+![Diagrama en blanco (11)](https://github.com/user-attachments/assets/5ef8ac7b-91c0-4c69-b249-85735e0af777)
+
 ---
 
 ## **10. Licencia**
