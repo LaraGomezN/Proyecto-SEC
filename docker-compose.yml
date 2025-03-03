@@ -20,10 +20,10 @@ services:
       - "8000:8000"
     environment:
       DB_USER: postgres
-      DB_PASSWORD: root
-      DB_HOST: user-db
+      DB_PASSWORD: dGi,;^L7Pe[EzZ6a
+      DB_HOST: 34.31.48.43
       DB_PORT: 5432
-      DB_NAME: user_db
+      DB_NAME: database
     depends_on:
       - user-db
     networks:
@@ -50,10 +50,10 @@ services:
       - "8080:8080"
     environment:
       DB_USER: postgres
-      DB_PASSWORD: root
-      DB_HOST: post-db
+      DB_PASSWORD: dGi,;^L7Pe[EzZ6a
+      DB_HOST: 34.31.48.43
       DB_PORT: 5432
-      DB_NAME: posts
+      DB_NAME: database
       USERS_PATH: user-management:8000
       TAGS_PATH: tag-management:8081
     depends_on:
@@ -82,10 +82,10 @@ services:
       - "8082:8082"
     environment:
       DB_USER: postgres
-      DB_PASSWORD: root
-      DB_HOST: review-db
+      DB_PASSWORD: dGi,;^L7Pe[EzZ6a
+      DB_HOST: 34.31.48.43
       DB_PORT: 5432
-      DB_NAME: review_db
+      DB_NAME: database
       USERS_PATH: user-management:8000
       POSTS_PATH: post-management:8080
     depends_on:
@@ -114,10 +114,10 @@ services:
       - "8081:8081"
     environment:
       DB_USER: postgres
-      DB_PASSWORD: root
-      DB_HOST: tag-db
+      DB_PASSWORD: dGi,;^L7Pe[EzZ6a
+      DB_HOST: 34.31.48.43
       DB_PORT: 5432
-      DB_NAME: tag_db
+      DB_NAME: database
       USERS_PATH: user-management:8000
       POSTS_PATH: post-management:8080
     depends_on:

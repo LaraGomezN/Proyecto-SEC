@@ -101,7 +101,7 @@ function CreatePost() {
             const valueReturned = Number(jsonResponse.id);
             const tagId = Number(selectedTag);
 
-            const responseTag = await fetch(`http://localhost:8080/posts/${valueReturned}/tags/${tagId}`, {
+            const responseTag = await fetch(`http://${ROUTES.POSTPATH}:8080/posts/${valueReturned}/tags/${tagId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
