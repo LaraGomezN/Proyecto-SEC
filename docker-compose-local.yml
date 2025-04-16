@@ -6,39 +6,37 @@ services:
     container_name: user-db
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: mydatabase
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: user_db
     ports:
       - "5432:5432"
     networks:
       - user_net
 
   user-management:
-    build: ./users
+    build: ./users/backend
     container_name: user-management
     ports:
-      - "3000:3000"
+      - "8000:8000"
     environment:
       DB_USER: postgres
-      DB_PASSWORD: postgres
+      DB_PASSWORD: root
       DB_HOST: user-db
       DB_PORT: 5432
-      DB_NAME: mydatabase
-      USERS_PATH: http://localhost:3000
+      DB_NAME: user_db
     depends_on:
       - user-db
     networks:
       - user_net
       - app_net
 
-
   post-db:
     image: postgres:15
     container_name: post-db
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123abc
-      POSTGRES_DB: postsDB
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: posts
     ports:
       - "5433:5432"
     networks:
@@ -48,145 +46,91 @@ services:
     build: ./posts
     container_name: post-management
     ports:
-      - "3001:3001"
+      - "8080:8080"
     environment:
       DB_USER: postgres
-      DB_PASSWORD: 123abc
+      DB_PASSWORD: root
       DB_HOST: post-db
       DB_PORT: 5432
-      DB_NAME: postsDB
-      USERS_PATH: http://user-management:3000
+      DB_NAME: posts
+      USERS_PATH: user-management:8000
+      TAGS_PATH: tag-management:8081
     depends_on:
       - post-db
     networks:
       - post_net
       - app_net
 
-
-  offer-db:
+  review-db:
     image: postgres:15
-    container_name: offer-db
+    container_name: review-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: offer
+      POSTGRES_DB: review_db
     ports:
       - "5434:5432"
     networks:
-      - offer_net
+      - review_net
 
-  offer-management:
-    build: ./offers
-    container_name: offer-management
+  review-management:
+    build: ./reviews
+    container_name: review-management
     ports:
-      - "3003:3003"
+      - "8082:8082"
     environment:
       DB_USER: postgres
       DB_PASSWORD: root
-      DB_HOST: offer-db
+      DB_HOST: review-db
       DB_PORT: 5432
-      DB_NAME: offer
-      USERS_PATH: http://user-management:3000
+      DB_NAME: review_db
+      USERS_PATH: user-management:8000
+      POSTS_PATH: post-management:8080
     depends_on:
-      - offer-db
+      - review-db
     networks:
-      - offer_net
+      - review_net
       - app_net
 
-
-  route-db:
+  tag-db:
     image: postgres:15
-    container_name: route-db
+    container_name: tag-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: route
+      POSTGRES_DB: tag_db
     ports:
       - "5435:5432"
     networks:
-      - route_net
+      - tag_net
 
-  route-management:
-    build: ./routes
-    container_name: route-management
+  tag-management:
+    build: ./tags
+    container_name: tag-management
     ports:
-      - "3002:3002"
+      - "8081:8081"
     environment:
       DB_USER: postgres
       DB_PASSWORD: root
-      DB_HOST: route-db
+      DB_HOST: tag-db
       DB_PORT: 5432
-      DB_NAME: route
-      USERS_PATH: http://user-management:3000
+      DB_NAME: tag_db
+      USERS_PATH: user-management:8000
+      POSTS_PATH: post-management:8080
     depends_on:
-      - route-db
+      - tag-db
     networks:
-      - route_net
-      - app_net
-
-
-  rf003:
-    build: ./rf003
-    container_name: rf003
-    ports:
-      - "3004:3004"
-    environment:
-      USERS_PATH: http://user-management:3000
-      POSTS_PATH: http://post-management:3001
-      ROUTES_PATH: http://route-management:3002
-      OFFERS_PATH: http://offer-management:3003
-    networks:
-      - app_net
-
-  rf004:
-    build: ./rf004
-    container_name: rf004
-    ports:
-      - "3005:3005"
-    environment:
-      USERS_PATH: http://user-management:3000
-      POSTS_PATH: http://post-management:3001
-      ROUTES_PATH: http://route-management:3002
-      OFFERS_PATH: http://offer-management:3003
-      SCORE_PATH: http://score-management:3007
-    networks:
-      - app_net
-
-  rf005:
-    build: ./rf005
-    container_name: rf005
-    ports:
-      - "3006:3006"
-    environment:
-      USERS_PATH: http://user-management:3000
-      POSTS_PATH: http://post-management:3001
-      ROUTES_PATH: http://route-management:3002
-      OFFERS_PATH: http://offer-management:3003
-      SCORE_PATH: http://score-management:3007
-    networks:
-      - app_net
-
-  score-management:
-    build: ./scoreTest
-    container_name: score-management
-    ports:
-      - "3007:3007"
-    environment:
-      USERS_PATH: http://user-management:3000
-      POSTS_PATH: http://post-management:3001
-      ROUTES_PATH: http://route-management:3002
-      OFFERS_PATH: http://offer-management:3003
-    networks:
+      - tag_net
       - app_net
 
 networks:
-  user_net:
+  tag_net:
+    driver: bridge
+  review_net:
     driver: bridge
   post_net:
     driver: bridge
-  offer_net:
-    driver: bridge
-  route_net:
+  user_net:
     driver: bridge
   app_net:
     driver: bridge
