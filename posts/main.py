@@ -230,6 +230,13 @@ async def get_posts_by_tag(tag_id: int, db: db_dependency, request: Request):
     posts = db.query(models.Post).filter(models.Post.id.in_(post_ids)).all()
 
     return posts
+    
+@app.get("/ping", status_code=status.HTTP_200_OK)
+async def healthCheck():
+    """
+    Health check endpoint.
+    """
+    return {"status": "pong"}
 
 
 
