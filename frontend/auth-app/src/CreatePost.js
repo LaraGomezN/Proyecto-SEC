@@ -1,29 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Button, Form, InputGroup } from "react-bootstrap";
-import ReactQuill from "react-quill-new"; // Importar la versión compatible con React 19
-import "react-quill-new/dist/quill.snow.css"; // Estilos de Quill
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 import ROUTES from "./routes";
 
 function CreatePost() {
     const navigate = useNavigate();
     const [titulo, setTitulo] = useState("");
-    const [contenido, setContenido] = useState(""); // Ahora con ReactQuill
-    const [tags, setTags] = useState([]); // Lista de tags disponibles
-    const [selectedTag, setSelectedTag] = useState(""); // Tag seleccionado para el post
-    const [newTag, setNewTag] = useState(""); // Nuevo tag a crear
+    const [contenido, setContenido] = useState("");
+    const [tags, setTags] = useState([]);
+    const [selectedTag, setSelectedTag] = useState("");
+    const [newTag, setNewTag] = useState("");
 
     useEffect(() => {
-        // Verificar el token
         const verifyToken = async () => {
             const token = localStorage.getItem("token");
 
             try {
                 const response = await fetch(`http://${ROUTES.USERPATH}/auth/verify-token/${token}`);
-
-                if (!response.ok) {
-                    throw new Error("Token verification failed");
-                }
+                if (!response.ok) throw new Error("Token verification failed");
             } catch (error) {
                 localStorage.removeItem("token");
                 navigate("/");
@@ -32,7 +28,7 @@ function CreatePost() {
 
         verifyToken();
 
-        // Cargar la lista de tags desde la API
+        // Cargar tags con validación
         fetch(`http://${ROUTES.TAGPATH}/tags`, {
             method: "GET",
             headers: {
@@ -41,11 +37,20 @@ function CreatePost() {
             },
         })
             .then(response => response.json())
-            .then(data => setTags(data))
-            .catch(error => console.error("Error cargando tags:", error));
+            .then(data => {
+                if (Array.isArray(data)) {
+                    setTags(data);
+                } else {
+                    console.error("Respuesta inesperada de tags:", data);
+                    setTags([]);
+                }
+            })
+            .catch(error => {
+                console.error("Error cargando tags:", error);
+                setTags([]); // fallback seguro
+            });
     }, [navigate]);
 
-    // Función para crear un nuevo tag
     const handleCreateTag = async () => {
         if (!newTag.trim()) return;
 
@@ -61,27 +66,21 @@ function CreatePost() {
                 body: JSON.stringify({ topic: newTag }),
             });
 
-            if (!response.ok) {
-                throw new Error("Error al crear el tag");
-            }
+            if (!response.ok) throw new Error("Error al crear el tag");
 
             const createdTag = await response.json();
-            setTags([...tags, createdTag]); // Agregar el nuevo tag a la lista
-            setSelectedTag(createdTag.id); // Seleccionar automáticamente el nuevo tag
-            setNewTag(""); // Limpiar el input
+            setTags(prev => Array.isArray(prev) ? [...prev, createdTag] : [createdTag]);
+            setSelectedTag(createdTag.id);
+            setNewTag("");
         } catch (error) {
             console.error("Error al crear el tag:", error);
         }
     };
 
-    // Función para crear el post
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const newPost = {
-            titulo,
-            contenido
-        };
+        const newPost = { titulo, contenido };
 
         try {
             const response = await fetch(`http://${ROUTES.POSTPATH}/posts`, {
@@ -93,9 +92,7 @@ function CreatePost() {
                 body: JSON.stringify(newPost)
             });
 
-            if (!response.ok) {
-                throw new Error("Error al crear el post");
-            }
+            if (!response.ok) throw new Error("Error al crear el post");
 
             const jsonResponse = await response.json();
             const valueReturned = Number(jsonResponse.id);
@@ -109,9 +106,7 @@ function CreatePost() {
                 }
             });
 
-            if (!responseTag.ok) {
-                throw new Error("Error al asociar el tag con el post");
-            }
+            if (!responseTag.ok) throw new Error("Error al asociar el tag con el post");
 
             navigate("/protected");
         } catch (error) {
@@ -123,7 +118,6 @@ function CreatePost() {
         <Container className="mt-4">
             <h2>Crear un Nuevo Post</h2>
             <Form onSubmit={handleSubmit}>
-                {/* Campo de título */}
                 <Form.Group controlId="titulo">
                     <Form.Label>Titulo</Form.Label>
                     <Form.Control
@@ -134,10 +128,9 @@ function CreatePost() {
                     />
                 </Form.Group>
 
-                {/* Editor WYSIWYG para Contenido */}
                 <Form.Group controlId="contenido" className="mt-3">
                     <Form.Label>Contenido</Form.Label>
-                    <ReactQuill 
+                    <ReactQuill
                         theme="snow"
                         value={contenido}
                         onChange={setContenido}
@@ -145,7 +138,6 @@ function CreatePost() {
                     />
                 </Form.Group>
 
-                {/* Crear un nuevo tag */}
                 <Form.Group controlId="crear-tag" className="mt-3">
                     <Form.Label>Crear un Nuevo Tag</Form.Label>
                     <InputGroup>
@@ -162,7 +154,6 @@ function CreatePost() {
                     </InputGroup>
                 </Form.Group>
 
-                {/* Menú desplegable de tags */}
                 <Form.Group controlId="tags" className="mt-3">
                     <Form.Label>Selecciona un Tag</Form.Label>
                     <Form.Control
@@ -172,7 +163,7 @@ function CreatePost() {
                         required
                     >
                         <option value="">Selecciona una opción...</option>
-                        {tags.map(tag => (
+                        {Array.isArray(tags) && tags.map(tag => (
                             <option key={tag.id} value={tag.id}>
                                 {tag.topic}
                             </option>
@@ -180,7 +171,6 @@ function CreatePost() {
                     </Form.Control>
                 </Form.Group>
 
-                {/* Botón de envío */}
                 <Button variant="success" type="submit" className="mt-3 me-3">
                     Publicar Post
                 </Button>
@@ -194,4 +184,3 @@ function CreatePost() {
 }
 
 export default CreatePost;
-
