@@ -43,7 +43,7 @@ const PostCardsAll = () => {
     // Función para obtener la lista de tags disponibles
     const fetchTags = async () => {
         try {
-            const response = await fetch(`http://${ROUTES.TAGPATH}/tags`, {
+            const response = await fetch(`http://${ROUTES.TAGPATH}/tags/`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
             });
 
