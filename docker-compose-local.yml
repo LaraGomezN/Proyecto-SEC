@@ -21,7 +21,7 @@ services:
     environment:
       DB_USER: postgres
       DB_PASSWORD: root
-      DB_HOST: user-db
+      DB_HOST: 10.128.0.7
       DB_PORT: 5432
       DB_NAME: user_db
     depends_on:
@@ -50,7 +50,7 @@ services:
     environment:
       DB_USER: postgres
       DB_PASSWORD: root
-      DB_HOST: post-db
+      DB_HOST: 10.128.0.7
       DB_PORT: 5432
       DB_NAME: posts
       USERS_PATH: user-management:8000
@@ -81,7 +81,7 @@ services:
     environment:
       DB_USER: postgres
       DB_PASSWORD: root
-      DB_HOST: review-db
+      DB_HOST: 10.128.0.7
       DB_PORT: 5432
       DB_NAME: review_db
       USERS_PATH: user-management:8000
@@ -112,7 +112,7 @@ services:
     environment:
       DB_USER: postgres
       DB_PASSWORD: root
-      DB_HOST: tag-db
+      DB_HOST: 10.128.0.7
       DB_PORT: 5432
       DB_NAME: tag_db
       USERS_PATH: user-management:8000
