@@ -20,8 +20,8 @@ services:
       - "8000:8000"
     environment:
       DB_USER: postgres
-      DB_PASSWORD: dGi,;^L7Pe[EzZ6a
-      DB_HOST: 34.31.48.43
+      DB_PASSWORD: pablogamer
+      DB_HOST: 10.127.160.3
       DB_PORT: 5432
       DB_NAME: database
     depends_on:
@@ -50,8 +50,8 @@ services:
       - "8080:8080"
     environment:
       DB_USER: postgres
-      DB_PASSWORD: dGi,;^L7Pe[EzZ6a
-      DB_HOST: 34.31.48.43
+      DB_PASSWORD: pablogamer
+      DB_HOST: 10.127.160.3
       DB_PORT: 5432
       DB_NAME: database
       USERS_PATH: user-management:8000
@@ -82,8 +82,8 @@ services:
       - "8082:8082"
     environment:
       DB_USER: postgres
-      DB_PASSWORD: dGi,;^L7Pe[EzZ6a
-      DB_HOST: 34.31.48.43
+      DB_PASSWORD: pablogamer
+      DB_HOST: 10.127.160.3
       DB_PORT: 5432
       DB_NAME: database
       USERS_PATH: user-management:8000
@@ -114,8 +114,8 @@ services:
       - "8081:8081"
     environment:
       DB_USER: postgres
-      DB_PASSWORD: dGi,;^L7Pe[EzZ6a
-      DB_HOST: 34.31.48.43
+      DB_PASSWORD: pablogamer
+      DB_HOST: 10.127.160.3
       DB_PORT: 5432
       DB_NAME: database
       USERS_PATH: user-management:8000
