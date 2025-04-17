@@ -29,7 +29,7 @@ function CreatePost() {
         verifyToken();
 
         // Cargar tags con validación
-        fetch(`http://${ROUTES.TAGPATH}/tags`, {
+        fetch(`http://${ROUTES.TAGPATH}/tags/`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -57,7 +57,7 @@ function CreatePost() {
         const token = localStorage.getItem("token");
 
         try {
-            const response = await fetch(`http://${ROUTES.TAGPATH}/tags`, {
+            const response = await fetch(`http://${ROUTES.TAGPATH}/tags/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
