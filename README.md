@@ -1,7 +1,10 @@
 # **Documentación del Proyecto-SEC**
 
-### Video demostración funcional de la aplicación
-[Enlace al video](https://www.youtube.com/watch?v=uLrWr5wCRJI)
+### Video demostración funcional de la aplicación - Proyecto 1
+[Proyecto 1](https://www.youtube.com/watch?v=uLrWr5wCRJI)
+
+### Video demostración funcional de la aplicación - Proyecto 2
+[Proyecto 2](https://www.youtube.com/watch?v=muj8EHDMkAI)
 
 ## **1. Introducción**
 
